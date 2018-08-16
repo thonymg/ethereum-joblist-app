@@ -1,0 +1,53 @@
+<nz-list [nzLoading]="loading" [nzDataSource]="list" [nzRenderItem]="item" [nzGrid]="{gutter: 24, lg: 6, md: 8, sm: 24, xs: 24 }">
+  <ng-template #item let-item>
+    <nz-list-item>
+      <button *ngIf="item === null" nz-button (click)="createTplModal(tplTitle, tplContent)" [nzType]="'dashed'" style="width: 100%; height: 183px;">
+        <i class="anticon anticon-plus"></i>
+        <span>Add job</span>
+      </button>
+      <app-job-cards [job]="item"></app-job-cards>
+    </nz-list-item>
+  </ng-template>
+</nz-list>
+
+<ng-template #tplTitle>
+  <span>Enter the new job here</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label nzRequired>Job title</nz-form-label>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="anticon anticon-exception" nzAddOnBefore="Job Title">
+          <input type="text" nz-input formControlName="jobTitle" placeholder="Job title">
+        </nz-input-group>
+        <nz-form-explain *ngIf="form.get('jobTitle').dirty && form.get('jobTitle').errors">Please input a job title.</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzRequired>Job description</nz-form-label>
+      <nz-form-control>
+        <nz-input-group>
+          <textarea style="min-height: 120px;" formControlName="jobDescription" nz-input placeholder="Job description"></textarea>
+        </nz-input-group>
+        <nz-form-explain *ngIf="form.get('jobDescription').dirty && form.get('jobDescription').errors">Please input a job description</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <nz-form-label nzXs="24" nzSm="7" nzRequired nzFor="title">Job Salary in Ether</nz-form-label>
+        <nz-input-group nzXs="24" nzSm="12" nzMd="10" nzPrefixIcon="anticon anticon-credit-card" nzAddOnBefore="Ether">
+          <nz-input-number formControlName="jobSalary" [(ngModel)]="jobSalary" [nzMin]="1.00" [nzMax]="100.00" [nzStep]="1" [nzFormatter]="formatterDollar"
+            [nzParser]="parserDollar"></nz-input-number>
+        </nz-input-group>
+        <nz-form-explain *ngIf="form.get('jobSalary').dirty && form.get('jobSalary').errors">Please input salary for the freelancer</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="primary" [disabled]="!form.valid">Add new job</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>
